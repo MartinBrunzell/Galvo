@@ -1,0 +1,14 @@
+# Setup
+motor_x = new power_source(name,..)
+motor_y = new power_source(name,..)
+
+Galvo = new Driver(motor_x,motor_y)
+
+# Operations
+
+# x and y are in unit volt
+Galvo.set_position(x,y)
+
+# defines a rectangle with corners defined by x_max,x_min,y_max and y_min.
+Galvo.scan([x_max,x_min], [y_max,y_min], [steps_x,steps_y])
+

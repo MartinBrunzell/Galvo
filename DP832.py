@@ -22,8 +22,8 @@ class DP832:
             self.instrument_list = self.rm.list_resources()
 
             self.address = [elem for elem in self.instrument_list if (elem.find('USB') != -1 and elem.find(
-                usb_or_serial) != -1)]  # Search a instrument with USB and serial number in the instrument list
-
+                usb_or_serial) != -1)]  # Search a instrument with USB and serial number in the instrument list  
+            #print(self.address)
             if self.address.__len__() == 0:
                 self.status = "Not Connected"
                 # print("Could not connect to device")

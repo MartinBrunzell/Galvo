@@ -50,5 +50,9 @@ class power_supply:
     def set_current(self,i):
         self.myrigol.set_current(1,i)
         self.myrigol.set_current(2,i)
+
+    def status(self):
+        return self.myrigol.status
+
     
         

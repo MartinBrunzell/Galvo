@@ -48,9 +48,9 @@ def main():
     print(myrigol.status)
     if myrigol.status == 'Connected':
         # scan_output(10,-10,21,myrigol,1)
-        myrigol.set_current(1, 1)
-        myrigol.set_current(2, 1)
-        repeat(myrigol, 5, 0)
+        myrigol.set_current(1, 0.1)
+        myrigol.set_current(2, 0.1)
+        #repeat(myrigol, 5, 0)
         # set_output(0,myrigol)
 
         # myrigol.toggle_output(0, 1)

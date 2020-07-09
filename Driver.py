@@ -1,12 +1,15 @@
 import numpy as np
 import power_supply as ps
 import time
+import ArduinoController
 
 class Driver:
     def __init__(self, power_x, power_y, max_voltage=10):
         self.power_x = power_x
         self.power_y = power_y
         self.max_voltage = max_voltage
+        self.ardu = ArduinoController.ArduinoController()
+        time.sleep(2)
         self.set_position(0,0)
 
     def display_position(self):
@@ -22,7 +25,7 @@ class Driver:
     def set_position(self,x,y):
         self.power_x.set_output(x)
         self.power_y.set_output(y)
-        self.display_position()
+        #self.display_position()
 
     def scan_rectangle(self,rectangle,dim,t_delay = 0):
         #rectangle = [x_max, y_max, x_min, y_min]
@@ -33,7 +36,21 @@ class Driver:
         for y in y_voltages:
             x_voltages = np.flip(x_voltages)
             for x in x_voltages:
+                self.ardu.write('3') #stop collecting
+                time.sleep(0.1)
                 self.set_position(x,y)
                 time.sleep(t_delay)
+                self.ardu.write('2') #start collecting
+
     
     
+    def is_connected(self):
+        status = True
+        if self.power_x.status != 'Connected':
+            status = False
+            print("x motor is not connected: ")
+        if self.power_y.status != 'Connected':
+            status = False
+            print("y motor is not connected: ")
+        return status
+

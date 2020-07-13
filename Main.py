@@ -13,22 +13,19 @@ motor_y_ID = 30000
 motor_x_ID = 30002
 time_tagger_ID = "FIO2"
 
-motor_x = ps.power_supply(motor_x_ID)
-motor_y = ps.power_supply(motor_y_ID)
 
 
+galvo = Driver.Driver()
 
-galvo = Driver.Driver(motor_x,motor_y, time_tagger_ID)
 
-# Tests
-#galvo.is_connected()
-#galvo.display_position()
 
 #galvo.set_position(1,1)
 #galvo.display_position()
 #galvo.set_current(1,1)
+
+
 start = time.time()
-#for i in range(0,50):
+
 galvo.scan_rectangle([2,1,-2,-1],[20,20])
 
 

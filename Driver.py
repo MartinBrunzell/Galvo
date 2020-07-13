@@ -3,27 +3,21 @@ import T7_power_supply as ps
 import time
 
 class Driver:
-    def __init__(self, power_x, power_y, time_tagger, max_voltage=10):
-        self.power_x = power_x
-        self.power_y = power_y
+    def __init__(self, max_voltage=10):
+        self.ID_x = 30002
+        self.ID_y = 30000 # For our Labbjack T7
+        self.channel_stop = "FIO3"
+        self.channel_start = "FIO2"
+ 
+        self.t7 = ps.T7()
+        
         self.max_voltage = max_voltage
-        self.time_tagger = ps.Time_Tagger(time_tagger)
         self.set_position(0,0)
 
-    def display_position(self):
-        # Displays the position in the console
-        print("x = " ,self.power_x.display_voltage()," V")
-        print("y = " ,self.power_y.display_voltage()," V")
-        
-    def set_current(self,ix,iy):
-        # Sets the active 
-        self.power_x.set_current(ix)
-        self.power_y.set_current(iy)
-
     def set_position(self,x,y):
-        self.power_x.set_output(x)
-        self.power_y.set_output(y)
-        #self.display_position()
+        self.t7.set_output(self.ID_x,x)
+        self.t7.set_output(self.ID_y,y)
+        
 
     def scan_rectangle(self,rectangle,dim,t_delay = 0):
         #rectangle = [x_max, y_max, x_min, y_min]
@@ -34,28 +28,17 @@ class Driver:
         for y in y_voltages:
             x_voltages = np.flip(x_voltages)
             for x in x_voltages:
-                self.time_tagger.ping()
-                self.time_tagger
+                self.t7.ping(self.channel_stop)
                 self.set_position(x,y)
-                self.time_tagger.ping()
+                self.t7.ping(self.channel_start)
 
-        self.time_tagger.ping()
+        self.t7.ping(self.channel_stop)
+
     
-    
-    def is_connected(self):
-        status = True
-        if self.power_x.status != 'Connected':
-            status = False
-            print("x motor is not connected: ")
-        if self.power_y.status != 'Connected':
-            status = False
-            print("y motor is not connected: ")
-        return status
+
 
     def end(self):
-        self.power_x.close()
-        #self.power_y.close()
-        #self.time_tagger.close()
+        self.t7.close()
 
 
         

@@ -1,15 +1,13 @@
 import numpy as np
-import power_supply as ps
+import T7_power_supply as ps
 import time
-import ArduinoController
 
 class Driver:
-    def __init__(self, power_x, power_y, max_voltage=10):
+    def __init__(self, power_x, power_y, time_tagger, max_voltage=10):
         self.power_x = power_x
         self.power_y = power_y
         self.max_voltage = max_voltage
-        self.ardu = ArduinoController.ArduinoController()
-        time.sleep(2)
+        self.time_tagger = ps.Time_Tagger(time_tagger)
         self.set_position(0,0)
 
     def display_position(self):
@@ -36,12 +34,12 @@ class Driver:
         for y in y_voltages:
             x_voltages = np.flip(x_voltages)
             for x in x_voltages:
-                self.ardu.write('3') #stop collecting
-                time.sleep(0.1)
+                self.time_tagger.ping()
+                self.time_tagger
                 self.set_position(x,y)
-                time.sleep(t_delay)
-                self.ardu.write('2') #start collecting
+                self.time_tagger.ping()
 
+        self.time_tagger.ping()
     
     
     def is_connected(self):
@@ -54,3 +52,10 @@ class Driver:
             print("y motor is not connected: ")
         return status
 
+    def end(self):
+        self.power_x.close()
+        #self.power_y.close()
+        #self.time_tagger.close()
+
+
+        

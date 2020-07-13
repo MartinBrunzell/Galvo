@@ -1,4 +1,4 @@
-from labjack import ljm
+from labjack import ljm  #Allows communication with the labjack
 import time
 import numpy as np
 
@@ -7,16 +7,25 @@ import numpy as np
 
 class T7:
     def __init__(self):
-        self.handle = ljm.openS("T7", "Any", "ANY")
+        """
+        Creates a connection with a T7 labjack connected in any port.
+        Also creates some constants to be used later
+        """
+        
+        self.handle = ljm.openS("T7", "Any", "ANY") #Connects with a T7 labjack in "ANY" port
         self.info = ljm.getHandleInfo(self.handle)
 
+
+        #Constant, they save space
         self.WRITE = ljm.constants.WRITE
         self.READ = ljm.constants.READ
-        self.FLOAT32 = ljm.constants.FLOAT32
+        self.FLOAT32 = ljm.constants.FLOAT32  #Currently the only one used
         self.UINT16 = ljm.constants.UINT16
         self.UINT32 = ljm.constants.UINT32
 
-    def set_output(self, ID,v):
+    def set_output(self, ID, v):
+        #Sets the output of the TICDAC to a value between +/- 10
+        #ID specifies which port the output is on
 
         if np.abs(v) < 10:
             dataType = self.FLOAT32
@@ -26,15 +35,19 @@ class T7:
             print("Error: voltage limit exceded (you idiot)")
 
 
-    def ping(self,channel,time_delay=0):
-        
-        ljm.eWriteName(self.handle, channel, 1)
+    def ping(self, port, time_delay=0):
+        """
+        Sends a quick signal in the port, used to communicate with the hydra harp
+        """
+
+        #Different command then eWriteAddress, not entirely sure why
+        ljm.eWriteName(self.handle, port, 1)
         time.sleep(time_delay) #Might slow down the program
-        ljm.eWriteName(self.handle, channel, 0)
+        ljm.eWriteName(self.handle, port, 0)
         
 
     def close(self):
-        ljm.close(self.handle)
+        ljm.close(self.handle) #Shuts off the connection with the labjack
 
       
  

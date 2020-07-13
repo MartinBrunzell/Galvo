@@ -4,8 +4,13 @@ import time
 
 class Driver:
     def __init__(self, max_voltage=10):
+        """
+        Initiates a Labjack-T7 object as a power supply
+        """
+
+        #The ID,s of the outports of the T7 labjack, hardcoded for our purposes
         self.ID_x = 30002
-        self.ID_y = 30000 # For our Labbjack T7
+        self.ID_y = 30000 
         self.channel_stop = "FIO3"
         self.channel_start = "FIO2"
  
@@ -15,6 +20,7 @@ class Driver:
         self.set_position(0,0)
 
     def set_position(self,x,y):
+        #sets the output of the different motors
         self.t7.set_output(self.ID_x,x)
         self.t7.set_output(self.ID_y,y)
         
@@ -28,9 +34,9 @@ class Driver:
         for y in y_voltages:
             x_voltages = np.flip(x_voltages)
             for x in x_voltages:
-                self.t7.ping(self.channel_stop)
+                self.t7.ping(self.channel_stop) #Sends a signal that mirrors are moving
                 self.set_position(x,y)
-                self.t7.ping(self.channel_start)
+                self.t7.ping(self.channel_start) #Sends a signal that the mirrors have stopped
 
         self.t7.ping(self.channel_stop)
 
@@ -38,7 +44,7 @@ class Driver:
 
 
     def end(self):
-        self.t7.close()
+        self.t7.close() #Closes the connection with the labjack
 
 
         

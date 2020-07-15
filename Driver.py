@@ -11,9 +11,13 @@ class Driver:
         #The ID,s of the outports of the T7 labjack, hardcoded for our purposes
         self.ID_x = 30002
         self.ID_y = 30000 
-        self.channel_stop = "FIO3"
-        self.channel_start = "FIO2"
- 
+        #self.channel_stop = "FIO3"
+        #self.channel_start = "FIO2"
+        self.channel_stop = 1000 #DAC0
+        self.channel_start = 1002 #DAC1
+        self.x = 0
+        self.y = 0
+
         self.t7 = ps.T7()
         
         self.max_voltage = max_voltage
@@ -23,6 +27,13 @@ class Driver:
         #sets the output of the different motors
         self.t7.set_output(self.ID_x,x)
         self.t7.set_output(self.ID_y,y)
+        self.x = x
+        self.y = y
+        
+
+    def get_position(self):
+        print("The X voltage is ", self.x, "Volts")
+        print("The Y voltage is ", self.y, "Volts")
         
 
     def scan_rectangle(self,rectangle,dim,t_delay = 0):
@@ -34,14 +45,13 @@ class Driver:
         for y in y_voltages:
             x_voltages = np.flip(x_voltages)
             for x in x_voltages:
-                self.t7.ping(self.channel_stop) #Sends a signal that mirrors are moving
+                self.t7.ping_DAC(self.channel_stop,0.5) #Sends a signal that mirrors are moving
                 self.set_position(x,y)
-                self.t7.ping(self.channel_start) #Sends a signal that the mirrors have stopped
+                self.t7.ping_DAC(self.channel_start,0.5) #Sends a signal that the mirrors have stopped
 
-        self.t7.ping(self.channel_stop)
+        self.t7.ping_DAC(self.channel_stop,0.5)
 
     
-
 
     def end(self):
         self.t7.close() #Closes the connection with the labjack

@@ -35,7 +35,7 @@ class T7:
             print("Error: voltage limit exceded (you idiot)")
 
 
-    def ping(self, port, time_delay=0):
+    def ping_FIO(self, port, time_delay=0):
         """
         Sends a quick signal in the port, used to communicate with the hydra harp
         """
@@ -44,6 +44,16 @@ class T7:
         ljm.eWriteName(self.handle, port, 1)
         time.sleep(time_delay) #Might slow down the program
         ljm.eWriteName(self.handle, port, 0)
+
+    def ping_DAC(self,address,v,time_delay=0):
+        """
+        Sends a quick signal in the adress, used to communicate with the hydra harp
+        """
+        
+        dataType = self.FLOAT32
+        ljm.eWriteAddress(self.handle, address, dataType, v)
+        time.sleep(time_delay)
+        ljm.eWriteAddress(self.handle, address, dataType, 0)
         
 
     def close(self):

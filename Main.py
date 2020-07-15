@@ -23,10 +23,16 @@ galvo = Driver.Driver()
 #galvo.display_position()
 #galvo.set_current(1,1)
 
+#while True:
+#   galvo.t7.ping_FIO("FIO2")
+#galvo.t7.ping_DAC(1000,0.5)
+    
+galvo.scan_rectangle([2,1,-2,-1],[20,20])
 
+"""
 start = time.time()
 
-galvo.scan_rectangle([2,1,-2,-1],[20,20])
+
 
 
 stop = time.time()
@@ -34,7 +40,10 @@ stop = time.time()
 print("elapsed time = ", stop-start)
 print("time/pixel = ", (stop-start)/(100*100))
 print("PPS = ", ((stop-start)/(20*20))**-1)
+"""
 
-galvo.end()
+galvo.set_position(0,0)
+
+#galvo.end()
 
 
